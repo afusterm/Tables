@@ -7,4 +7,8 @@ package io.keepcoding.tables.model;
 public interface RESTClient {
     void get();
     void addGetListener(GetListener getListener);
+
+    interface GetListener {
+        void getReceived(String json);
+    }
 }

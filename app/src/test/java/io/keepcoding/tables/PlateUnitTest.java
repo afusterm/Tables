@@ -7,23 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.keepcoding.tables.model.Allergen;
-import io.keepcoding.tables.model.GetListener;
 import io.keepcoding.tables.model.Plate;
 import io.keepcoding.tables.model.RESTClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+
 public class PlateUnitTest {
     @Test
     public void downloadAndPopulateListOfPlates() throws Exception {
         RESTClient client = new FakeRESTClient();
-        client.addGetListener(new GetListener() {
+        client.addGetListener(new RESTClient.GetListener() {
             public void getReceived(String json) {
 
                 List<Plate> plates = null;
@@ -39,7 +34,6 @@ public class PlateUnitTest {
                 assertEquals("The price must be 7.5", 7.5, plate.getPrice(), 0.1);
                 assertEquals("The number of allergens is 2", 2, allergens.size());
                 assertEquals("One allergen is Gluten", "Gluten", allergens.get(0).getName());
-
 
                 plate = plates.get(1);
                 allergens = plate.getAllergens();
