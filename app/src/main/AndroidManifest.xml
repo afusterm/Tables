@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SettingsActivity">
-
+        </activity>
+        <activity android:name=".activity.OrderActivity">
         </activity>
     </application>
 

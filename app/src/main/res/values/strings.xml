@@ -5,4 +5,7 @@
     <string name="save">Guardar</string>
     <string name="tables_title">Selecciona mesa</string>
     <string name="tables_warning">Indicar las mesas en los ajustes</string>
+    <string name="table_item">Mesa %d</string>
+    <string name="plate">Plato</string>
+    <string name="units">Uds</string>
 </resources>

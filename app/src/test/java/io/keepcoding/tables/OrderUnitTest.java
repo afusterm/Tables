@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import io.keepcoding.tables.model.Order;
 import io.keepcoding.tables.model.Plate;
+import io.keepcoding.tables.model.Tables;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,11 +13,17 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class OrderUnitTest {
+
     @Test
     public void addOneLineAndGetNoticed() {
-        Order order = new Order(1);
+        int lines = 0;
+        Tables.createTable();
+        Order order = Tables.getTable(0).getOrder();
+        Plate plate = new Plate(1, "Plate 1", "Description of plate 1", 5f, null);
+        order.addLine(plate, null);
+        /* XXX
         order.addListener(new Order.LinesListener() {
-            public void lineAdded(int line) {
+            public void lineAdded(Order.Line line) {
                 assertEquals("The line must be 0", 0, line);
             }
 
@@ -24,12 +31,15 @@ public class OrderUnitTest {
             public void lineRemoved(int line) {
 
             }
-        });
+        });*/
+
+        assertEquals("The lines added must be 1", 1, order.getLines().size());
     }
 
     @Test
     public void removeSecondLineAndGetNoticed() {
-        Order order = new Order(1);
+        Tables.createTable();
+        Order order = Tables.getTable(0).getOrder();
         order.addListener(new Order.LinesListener() {
             @Override
             public void lineAdded(int line) {
@@ -42,27 +52,28 @@ public class OrderUnitTest {
         });
 
         Plate plate = new Plate(3, "Plate 3", "Description of plate 3", 5, null);
-        order.addLine(plate, 1, null);
+        order.addLine(plate, null);
         plate = new Plate(5, "Plate 5", "Description of plate 5", 10.5f, null);
-        order.addLine(plate, 1, null);
+        order.addLine(plate, null);
         plate = new Plate(10, "Plate 10", "Description of plate 10", 7.75f, null);
-        order.addLine(plate, 1, null);
+        order.addLine(plate, null);
         order.removeLine(1);
     }
 
     @Test
     public void calculateTotal() {
-        Order order = new Order(1);
+        Tables.createTable();
+        Order order = Tables.getTable(0).getOrder();
         Plate plate = new Plate(1, "Plate 1", "Description of plate 1", 3.5f, null);
-        order.addLine(plate, 1, null);
+        order.addLine(plate, null);
         plate = new Plate(2, "Plate 2", "Description of plate  2", 2, null);
-        order.addLine(plate, 2, null);
+        order.addLine(plate, null);
         plate = new Plate(3, "Plate 3", "Description of plate 3", 4, null);
-        order.addLine(plate, 1, null);
+        order.addLine(plate, null);
         plate = new Plate(8, "Plate 8", "Description of plate 8", 2, null);
-        order.addLine(plate, 1, "Sin huevo");
+        order.addLine(plate, "Sin huevo");
         float total = order.calculateTotal();
 
-        assertEquals(13.5f, total, 0.1f);
+        assertEquals(11.5f, total, 0.1f);
     }
 }
