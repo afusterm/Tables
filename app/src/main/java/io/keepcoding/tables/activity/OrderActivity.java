@@ -1,8 +1,8 @@
 package io.keepcoding.tables.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import io.keepcoding.tables.R;
 import io.keepcoding.tables.model.Order;
 import io.keepcoding.tables.model.Plate;
-import io.keepcoding.tables.model.Tables;
 
-public class OrderActivity extends Activity {
+public class OrderActivity extends AppCompatActivity {
     private Order mOrder;
     private ArrayAdapter<String> mAdapter;
 
@@ -23,8 +22,18 @@ public class OrderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        int table = getIntent().getIntExtra(TablesActivity.EXTRA_TABLE_NUMBER, 0);
-        configureOrder(table);
+        mOrder = (Order) getIntent().getSerializableExtra(TablesActivity.EXTRA_ORDER);
+        mOrder.addListener(new Order.LinesListener() {
+            @Override
+            public void lineAdded(Order.Line line) {
+                mAdapter.add(line.getPlate().getName());
+            }
+
+            @Override
+            public void lineRemoved(int line) {
+
+            }
+        });
 
         ListView listView = (ListView) findViewById(android.R.id.list);
         mAdapter = new ArrayAdapter<String>(this,
@@ -40,22 +49,7 @@ public class OrderActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Plate plate = new Plate(1, "Plato 1", "Descripcion plato 1", 5f, null);
-                mOrder.addLine(plate, null);
-            }
-        });
-    }
-
-    private void configureOrder(int table) {
-        mOrder = Tables.getTable(table).getOrder();
-        mOrder.addListener(new Order.LinesListener() {
-            @Override
-            public void lineAdded(Order.Line line) {
-                mAdapter.add(line.getPlate().getName());
-            }
-
-            @Override
-            public void lineRemoved(Order.Line line) {
-
+                mOrder.addLine(plate);
             }
         });
     }

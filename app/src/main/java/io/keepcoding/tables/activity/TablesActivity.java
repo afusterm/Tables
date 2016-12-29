@@ -1,10 +1,10 @@
 package io.keepcoding.tables.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,16 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.keepcoding.tables.R;
+import io.keepcoding.tables.model.Table;
 import io.keepcoding.tables.model.Tables;
 
-public class TablesActivity extends Activity {
-    public static final String EXTRA_TABLE_NUMBER = "io.keepcoding.tables.activity.TablesActivity.EXTRA_TABLE_NUMBER";
+public class TablesActivity extends AppCompatActivity {
+    public static final String EXTRA_ORDER = "io.keepcoding.tables.activity.TablesActivity.EXTRA_ORDER";
 
     private static final int REQUEST_TABLES = 1;
     private static final String NUMBER_OF_TABLES = "NumberOfTables";
 
     private ListView mListView;
     private MenuItem mSettings;
+    private Tables mTables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class TablesActivity extends Activity {
         int tables = PreferenceManager.getDefaultSharedPreferences(this).getInt(NUMBER_OF_TABLES, 0);
 
         if (tables == 0) {
-            openSettings();
+            openSettings(0);
         } else {
             createTables(tables);
         }
@@ -52,11 +54,11 @@ public class TablesActivity extends Activity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        super.onMenuItemSelected(featureId, item);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
 
         if (item.getItemId() == R.id.menu_show_settings) {
-            openSettings();
+            openSettings(mTables.size());
         }
 
         return true;
@@ -76,19 +78,22 @@ public class TablesActivity extends Activity {
         }
     }
 
-    private void createTables(int tables) {
-        for (int i = 0; i < tables; i++) {
-            Tables.createTable();
+    private void createTables(int numberOfTables) {
+        List<Table> tables = new ArrayList<>();
+        for (int i = 0; i < numberOfTables; i++) {
+            tables.add(new Table(i));
         }
+
+        mTables = new Tables(tables);
 
         fillListWithTables();
     }
 
-    private void openSettings() {
+    private void openSettings(int numberOfTables) {
         Intent intent = new Intent(this, SettingsActivity.class);
 
-        if (Tables.size() != 0) {
-            intent.putExtra(SettingsActivity.EXTRA_TABLES, Tables.size());
+        if (numberOfTables != 0) {
+            intent.putExtra(SettingsActivity.EXTRA_TABLES, numberOfTables);
         }
 
         startActivityForResult(intent, REQUEST_TABLES);
@@ -105,16 +110,17 @@ public class TablesActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(context, OrderActivity.class);
-                intent.putExtra(EXTRA_TABLE_NUMBER, position);
+                final Table table = mTables.getTable(position);
+                intent.putExtra(EXTRA_ORDER, table.getOrder());
                 startActivity(intent);
             }
         });
     }
 
     private List<String> createTablesModel() {
-        List<String> model = new ArrayList<String>();
+        List<String> model = new ArrayList<>();
 
-        for (int i = 0; i < Tables.size(); i++) {
+        for (int i = 0; i < mTables.size(); i++) {
             model.add(String.format(getString(R.string.table_item), i + 1));
         }
 

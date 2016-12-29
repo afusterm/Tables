@@ -1,26 +1,23 @@
 package io.keepcoding.tables.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by alejandro on 04/12/2016.
- */
-
-public class Order {
+public class Order implements Serializable {
     public interface LinesListener {
         void lineAdded(Line line);
-        void lineRemoved(Line line);
+        void lineRemoved(int line);
     }
 
-    public class Line {
+    public class Line implements Serializable {
         private Plate mPlate;
         private String mVariant;
+        private int mUnits;
 
-        private Line(Plate plate, String variant) {
+        private Line(Plate plate) {
             mPlate = plate;
-            mVariant = variant;
         }
 
         public Plate getPlate() {
@@ -30,10 +27,23 @@ public class Order {
         public String getVariant() {
             return mVariant;
         }
+
+        public void setVariant(String variant) {
+            mVariant = variant;
+        }
+
+        public int getUnits() {
+            return mUnits;
+        }
+
+        public void setUnits(int units) {
+            mUnits = units;
+        }
     }
 
     private List<Line> mLines;
     private List<LinesListener> mListeners;
+    private Table mTable;
 
     Order() {
         mLines = new ArrayList<Line>();
@@ -54,8 +64,12 @@ public class Order {
         mListeners.add(listener);
     }
 
-    public void addLine(Plate plate, String variant) {
-        Line line = new Line(plate, variant);
+    public Line getLine(int position) {
+        return mLines.get(position);
+    }
+
+    public void addLine(Plate plate) {
+        Line line = new Line(plate);
         mLines.add(line);
 
         for (LinesListener listener: mListeners) {
@@ -63,7 +77,7 @@ public class Order {
         }
     }
 
-    public void removeLine(Line line) {
+    public void removeLine(int line) {
         mLines.remove(line);
 
         for (LinesListener listener: mListeners) {
@@ -71,7 +85,7 @@ public class Order {
         }
     }
 
-    public List<Line> getLines() {
-        return mLines;
+    public int size() {
+        return mLines.size();
     }
 }
