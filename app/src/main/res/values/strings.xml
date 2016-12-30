@@ -8,4 +8,7 @@
     <string name="table_item">Mesa %d</string>
     <string name="plate">Plato</string>
     <string name="units">Uds</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

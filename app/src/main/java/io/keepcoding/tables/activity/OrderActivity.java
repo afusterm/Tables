@@ -10,6 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import io.keepcoding.tables.R;
+import io.keepcoding.tables.fragment.TablesFragment;
 import io.keepcoding.tables.model.Order;
 import io.keepcoding.tables.model.Plate;
 
@@ -22,7 +23,7 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        mOrder = (Order) getIntent().getSerializableExtra(TablesActivity.EXTRA_ORDER);
+        mOrder = (Order) getIntent().getSerializableExtra(TablesFragment.EXTRA_ORDER);
         mOrder.addListener(new Order.LinesListener() {
             @Override
             public void lineAdded(Order.Line line) {
