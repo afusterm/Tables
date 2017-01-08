@@ -22,22 +22,22 @@ public class Courses {
         List<Course> courses = new ArrayList<>();
 
         JSONObject root = new JSONObject(json);
-        JSONArray jsonPlates = root.getJSONArray("Courses");
+        JSONArray jsonCourses = root.getJSONArray("Courses");
 
-        for (int i = 0; i < jsonPlates.length(); i++) {
-            JSONObject jsonPlate = jsonPlates.getJSONObject(i);
-            Course course = getCourseFromJSONObject(jsonPlate);
+        for (int i = 0; i < jsonCourses.length(); i++) {
+            JSONObject jsonCourse = jsonCourses.getJSONObject(i);
+            Course course = getCourseFromJSONObject(jsonCourse);
             courses.add(course);
         }
 
         sCourses = courses;
     }
 
-    private static Course getCourseFromJSONObject(JSONObject jsonPlate) throws JSONException {
-        String name = jsonPlate.getString("name");
-        float price = (float) jsonPlate.getDouble("price");
-        String pictureUrl = jsonPlate.getString("picture");
-        JSONArray jsonAllergens = jsonPlate.getJSONArray("allergens");
+    private static Course getCourseFromJSONObject(JSONObject jsonCourse) throws JSONException {
+        String name = jsonCourse.getString("name");
+        float price = (float) jsonCourse.getDouble("price");
+        String pictureUrl = jsonCourse.getString("picture");
+        JSONArray jsonAllergens = jsonCourse.getJSONArray("allergens");
         List<Allergen> allergens = getAllergensFromJSONArray(jsonAllergens);
 
         return new Course(name, price, pictureUrl, allergens);
