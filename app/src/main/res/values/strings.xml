@@ -6,9 +6,13 @@
     <string name="tables_title">Selecciona mesa</string>
     <string name="tables_warning">Indicar las mesas en los ajustes</string>
     <string name="table_item">Mesa %d</string>
-    <string name="plate">Plato</string>
+    <string name="course">Plato</string>
     <string name="units">Uds</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tables_activity_error_download">Error al descargar los platos</string>
+    <string name="tables_activity_error_load">Error al cargar los platos</string>
+    <string name="currency">€</string>
+    <string name="title_settings">Ajustes</string>
+    <string name="title_order">Pedido</string>
+    <string name="title_courses">Platos</string>
+    <string name="title_tables">Mesas</string>
 </resources>

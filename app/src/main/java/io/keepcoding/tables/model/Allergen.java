@@ -1,9 +1,5 @@
 package io.keepcoding.tables.model;
 
-/**
- * Created by alejandro on 03/12/2016.
- */
-
 public class Allergen {
     private String mName;
     private String mIconURL;
@@ -17,7 +13,7 @@ public class Allergen {
         return mName;
     }
 
-    public String iconURL() {
+    public String getIconURL() {
         return mIconURL;
     }
 }

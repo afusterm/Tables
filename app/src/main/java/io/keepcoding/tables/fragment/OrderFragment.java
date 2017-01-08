@@ -1,6 +1,7 @@
 package io.keepcoding.tables.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import io.keepcoding.tables.R;
+import io.keepcoding.tables.activity.CoursesActivity;
 import io.keepcoding.tables.model.Order;
-import io.keepcoding.tables.model.Plate;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +38,7 @@ public class OrderFragment extends Fragment {
         mOrder.addListener(new Order.LinesListener() {
             @Override
             public void lineAdded(Order.Line line) {
-                mAdapter.add(line.getPlate().getName());
+                mAdapter.add(line.getCourse().getName());
             }
 
             @Override
@@ -61,8 +62,8 @@ public class OrderFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Plate plate = new Plate(1, "Plato 1", "Descripcion plato 1", 5f, null);
-                mOrder.addLine(plate);
+                Intent intent = new Intent(getActivity(), CoursesActivity.class);
+                startActivity(intent);
             }
         });
     }

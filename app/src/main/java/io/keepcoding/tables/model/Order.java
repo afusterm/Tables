@@ -12,16 +12,16 @@ public class Order implements Serializable {
     }
 
     public class Line implements Serializable {
-        private Plate mPlate;
+        private Course mCourse;
         private String mVariant;
         private int mUnits;
 
-        private Line(Plate plate) {
-            mPlate = plate;
+        private Line(Course course) {
+            mCourse = course;
         }
 
-        public Plate getPlate() {
-            return mPlate;
+        public Course getCourse() {
+            return mCourse;
         }
 
         public String getVariant() {
@@ -53,8 +53,8 @@ public class Order implements Serializable {
     public float calculateTotal() {
         float total = 0;
         for (Line line: mLines) {
-            Plate plate = line.getPlate();
-            total += plate.getPrice();
+            Course course = line.getCourse();
+            total += course.getPrice();
         }
 
         return total;
@@ -68,8 +68,8 @@ public class Order implements Serializable {
         return mLines.get(position);
     }
 
-    public void addLine(Plate plate) {
-        Line line = new Line(plate);
+    public void addLine(Course course) {
+        Line line = new Line(course);
         mLines.add(line);
 
         for (LinesListener listener: mListeners) {
