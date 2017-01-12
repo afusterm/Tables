@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import io.keepcoding.tables.R;
 import io.keepcoding.tables.activity.CoursesActivity;
+import io.keepcoding.tables.adapter.OrdersAdapter;
 import io.keepcoding.tables.model.Courses;
 import io.keepcoding.tables.model.Order;
 
@@ -27,7 +26,6 @@ public class OrderFragment extends Fragment {
     private static final int ORDER_REQUEST = 1;
 
     private Order mOrder;
-    private ArrayAdapter<String> mAdapter;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -43,7 +41,7 @@ public class OrderFragment extends Fragment {
         mOrder.addListener(new Order.LinesListener() {
             @Override
             public void lineAdded(Order.Line line) {
-                mAdapter.add(line.getCourse().getName());
+
             }
 
             @Override
@@ -52,10 +50,11 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        ListView listView = (ListView) root.findViewById(android.R.id.list);
-        mAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, new ArrayList<String>());
-        listView.setAdapter(mAdapter);
+        RecyclerView ordersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
+        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
+        ordersRecyclerView.setAdapter(adapter);
 
         configureAddButton(root);
 

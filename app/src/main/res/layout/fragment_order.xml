@@ -20,8 +20,8 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_plus"/>
 
-    <ListView
-        android:id="@android:id/list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/orders_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
