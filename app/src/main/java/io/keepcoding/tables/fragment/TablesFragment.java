@@ -34,6 +34,7 @@ public class TablesFragment extends Fragment {
     private static final String NUMBER_OF_TABLES = "NumberOfTables";
 
     private Tables mTables;
+    private View root;
 
 
     public TablesFragment() {
@@ -43,7 +44,7 @@ public class TablesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_tables, container, false);
+        root = inflater.inflate(R.layout.fragment_tables, container, false);
 
         int tables = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(NUMBER_OF_TABLES, 0);
 
@@ -84,6 +85,7 @@ public class TablesFragment extends Fragment {
         if (requestCode == REQUEST_TABLES && resultCode == RESULT_OK) {
             int tables = data.getIntExtra(SettingsActivity.EXTRA_TABLES, 1);
             createTables(tables);
+            fillListWithTables(root);
             PreferenceManager.getDefaultSharedPreferences(getActivity())
                     .edit()
                     .putInt(NUMBER_OF_TABLES, tables)

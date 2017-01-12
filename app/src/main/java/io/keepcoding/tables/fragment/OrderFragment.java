@@ -38,10 +38,17 @@ public class OrderFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_order, container, false);
 
         mOrder = (Order) getActivity().getIntent().getSerializableExtra(TablesFragment.EXTRA_ORDER);
+
+        RecyclerView ordersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
+        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        final OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
+        ordersRecyclerView.setAdapter(adapter);
+
         mOrder.addListener(new Order.LinesListener() {
             @Override
             public void lineAdded(Order.Line line) {
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -50,11 +57,6 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        RecyclerView ordersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
-        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
-        ordersRecyclerView.setAdapter(adapter);
 
         configureAddButton(root);
 

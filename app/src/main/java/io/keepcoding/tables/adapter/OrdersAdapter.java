@@ -18,17 +18,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrderRowViewHolder> {
     public OrdersAdapter(@NonNull final Context context, @NonNull final Order order) {
         mLayoutInflater = LayoutInflater.from(context);
         mOrder = order;
-        mOrder.addListener(new Order.LinesListener() {
-            @Override
-            public void lineAdded(Order.Line line) {
-
-            }
-
-            @Override
-            public void lineRemoved(int line) {
-
-            }
-        });
     }
 
     @Override
