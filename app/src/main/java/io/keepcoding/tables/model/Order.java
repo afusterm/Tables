@@ -1,23 +1,23 @@
 package io.keepcoding.tables.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Order implements Serializable {
-    public interface LinesListener {
+public class Order {
+    public interface OrderListener {
         void lineAdded(Line line);
         void lineRemoved(int line);
     }
 
-    public class Line implements Serializable {
+    public class Line {
         private Course mCourse;
         private String mVariant;
         private int mUnits;
 
         private Line(Course course) {
             mCourse = course;
+            mUnits = 1;
         }
 
         public Course getCourse() {
@@ -42,12 +42,12 @@ public class Order implements Serializable {
     }
 
     private List<Line> mLines;
-    private List<LinesListener> mListeners;
+    private List<OrderListener> mListeners;
     private Table mTable;
 
     Order() {
-        mLines = new ArrayList<Line>();
-        mListeners = new ArrayList<LinesListener>();
+        mLines = new ArrayList<>();
+        mListeners = new ArrayList<>();
     }
 
     public float calculateTotal() {
@@ -60,7 +60,7 @@ public class Order implements Serializable {
         return total;
     }
 
-    public void addListener(LinesListener listener) {
+    public void addListener(OrderListener listener) {
         mListeners.add(listener);
     }
 
@@ -72,7 +72,7 @@ public class Order implements Serializable {
         Line line = new Line(course);
         mLines.add(line);
 
-        for (LinesListener listener: mListeners) {
+        for (OrderListener listener: mListeners) {
             listener.lineAdded(line);
         }
     }
@@ -80,7 +80,7 @@ public class Order implements Serializable {
     public void removeLine(int line) {
         mLines.remove(line);
 
-        for (LinesListener listener: mListeners) {
+        for (OrderListener listener: mListeners) {
             listener.lineRemoved(line);
         }
     }

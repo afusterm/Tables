@@ -18,13 +18,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SettingsActivity"
-            android:label="@string/title_settings">
+            android:label="@string/title_settings"
+            android:parentActivityName=".activity.TablesActivity">
         </activity>
         <activity android:name=".activity.OrderActivity"
-            android:label="@string/title_order">
+            android:label="@string/title_order"
+            android:parentActivityName=".activity.TablesActivity">
         </activity>
         <activity android:name=".activity.CoursesActivity"
-            android:label="@string/title_courses">
+            android:label="@string/title_courses"
+            android:parentActivityName=".activity.CoursesActivity">
         </activity>
     </application>
 

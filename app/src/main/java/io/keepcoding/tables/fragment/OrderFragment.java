@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import io.keepcoding.tables.activity.CoursesActivity;
 import io.keepcoding.tables.adapter.OrdersAdapter;
 import io.keepcoding.tables.model.Courses;
 import io.keepcoding.tables.model.Order;
+import io.keepcoding.tables.model.Tables;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,7 +40,8 @@ public class OrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_order, container, false);
 
-        mOrder = (Order) getActivity().getIntent().getSerializableExtra(TablesFragment.EXTRA_ORDER);
+        int position = getActivity().getIntent().getIntExtra(TablesFragment.EXTRA_ORDER, 0);
+        mOrder = Tables.get(position).getOrder();
 
         RecyclerView ordersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -45,7 +49,7 @@ public class OrderFragment extends Fragment {
         final OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
         ordersRecyclerView.setAdapter(adapter);
 
-        mOrder.addListener(new Order.LinesListener() {
+        mOrder.addListener(new Order.OrderListener() {
             @Override
             public void lineAdded(Order.Line line) {
                 adapter.notifyDataSetChanged();
@@ -57,7 +61,8 @@ public class OrderFragment extends Fragment {
             }
         });
 
-
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         configureAddButton(root);
 
         return root;

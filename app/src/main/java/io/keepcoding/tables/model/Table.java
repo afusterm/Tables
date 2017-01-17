@@ -1,8 +1,6 @@
 package io.keepcoding.tables.model;
 
-import java.io.Serializable;
-
-public class Table implements Serializable {
+public class Table {
     private int mNumber;
     private Order mOrder;
 

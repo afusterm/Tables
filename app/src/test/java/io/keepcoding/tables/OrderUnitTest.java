@@ -5,6 +5,7 @@ import org.junit.Test;
 import io.keepcoding.tables.model.Course;
 import io.keepcoding.tables.model.Order;
 import io.keepcoding.tables.model.Table;
+import io.keepcoding.tables.model.Tables;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +14,8 @@ public class OrderUnitTest {
 
     @Test
     public void addOneLine() {
-        Table table = new Table(0);
+        Tables.createTables(1);
+        Table table = Tables.get(0);
         Order order = table.getOrder();
 
         Course course = new Course("Course 1", 5f, "picture url", null);
@@ -29,7 +31,8 @@ public class OrderUnitTest {
 
     @Test
     public void removeSecondLine() {
-        Table table = new Table(0);
+        Tables.createTables(1);
+        Table table = Tables.get(0);
         Order order = table.getOrder();
 
         Course course = new Course("Course 3", 5, "picture url", null);
@@ -48,7 +51,8 @@ public class OrderUnitTest {
 
     @Test
     public void calculateTotal() {
-        Table table = new Table(0);
+        Tables.createTables(1);
+        Table table = Tables.get(0);
         Order order = table.getOrder();
         Course course = new Course("Course 1", 3.5f, "picture url", null);
         order.addLine(course);

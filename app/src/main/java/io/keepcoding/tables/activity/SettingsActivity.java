@@ -2,6 +2,7 @@ package io.keepcoding.tables.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -36,6 +37,9 @@ public class SettingsActivity extends AppCompatActivity {
                 save();
             }
         });
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void configurePicker() {

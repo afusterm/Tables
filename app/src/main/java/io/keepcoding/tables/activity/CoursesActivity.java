@@ -2,6 +2,7 @@ package io.keepcoding.tables.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,5 +34,8 @@ public class CoursesActivity extends AppCompatActivity {
         });
 
         coursesRecyclerView.setAdapter(adapter);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 }

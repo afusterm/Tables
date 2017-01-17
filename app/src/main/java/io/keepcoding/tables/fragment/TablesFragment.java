@@ -21,10 +21,10 @@ import java.util.List;
 import io.keepcoding.tables.R;
 import io.keepcoding.tables.activity.OrderActivity;
 import io.keepcoding.tables.activity.SettingsActivity;
-import io.keepcoding.tables.model.Table;
 import io.keepcoding.tables.model.Tables;
 
 import static android.app.Activity.RESULT_OK;
+import static io.keepcoding.tables.model.Tables.createTables;
 
 
 public class TablesFragment extends Fragment {
@@ -33,7 +33,6 @@ public class TablesFragment extends Fragment {
     private static final int REQUEST_TABLES = 1;
     private static final String NUMBER_OF_TABLES = "NumberOfTables";
 
-    private Tables mTables;
     private View root;
 
 
@@ -49,7 +48,7 @@ public class TablesFragment extends Fragment {
         int tables = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(NUMBER_OF_TABLES, 0);
 
         if (tables == 0) {
-            openSettings(0);
+            openSettings();
         } else {
             createTables(tables);
             fillListWithTables(root);
@@ -72,7 +71,7 @@ public class TablesFragment extends Fragment {
         super.onOptionsItemSelected(item);
 
         if (item.getItemId() == R.id.menu_show_settings) {
-            openSettings(mTables.size());
+            openSettings();
         }
 
         return true;
@@ -84,7 +83,7 @@ public class TablesFragment extends Fragment {
 
         if (requestCode == REQUEST_TABLES && resultCode == RESULT_OK) {
             int tables = data.getIntExtra(SettingsActivity.EXTRA_TABLES, 1);
-            createTables(tables);
+            Tables.createTables(tables);
             fillListWithTables(root);
             PreferenceManager.getDefaultSharedPreferences(getActivity())
                     .edit()
@@ -93,23 +92,14 @@ public class TablesFragment extends Fragment {
         }
     }
 
-    private void openSettings(int numberOfTables) {
+    private void openSettings() {
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
 
-        if (numberOfTables != 0) {
-            intent.putExtra(SettingsActivity.EXTRA_TABLES, numberOfTables);
+        if (Tables.size() != 0) {
+            intent.putExtra(SettingsActivity.EXTRA_TABLES, Tables.size());
         }
 
         startActivityForResult(intent, REQUEST_TABLES);
-    }
-
-    private void createTables(int numberOfTables) {
-        List<Table> tables = new ArrayList<>();
-        for (int i = 0; i < numberOfTables; i++) {
-            tables.add(new Table(i));
-        }
-
-        mTables = new Tables(tables);
     }
 
     private void fillListWithTables(View view) {
@@ -122,8 +112,7 @@ public class TablesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), OrderActivity.class);
-                final Table table = mTables.getTable(position);
-                intent.putExtra(EXTRA_ORDER, table.getOrder());
+                intent.putExtra(EXTRA_ORDER, position);
                 startActivity(intent);
             }
         });
@@ -132,7 +121,7 @@ public class TablesFragment extends Fragment {
     private List<String> createTablesModel() {
         List<String> model = new ArrayList<>();
 
-        for (int i = 0; i < mTables.size(); i++) {
+        for (int i = 0; i < Tables.size(); i++) {
             model.add(String.format(getString(R.string.table_item), i + 1));
         }
 

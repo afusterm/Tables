@@ -1,22 +1,28 @@
 package io.keepcoding.tables.model;
 
-import android.support.annotation.NonNull;
-
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Tables {
-    private final List<Table> mTables;
+    private static List<Table> sTables;
 
-    public Tables(final @NonNull List<Table> tables) {
-        mTables = tables;
+    public static void createTables(int numberOfTables) {
+        sTables = new ArrayList<>(numberOfTables);
+        for (int i = 0; i < numberOfTables; i++) {
+            sTables.add(new Table(i + 1));
+        }
     }
 
-    public Table getTable(int number) {
-        return mTables.get(number);
+    public static Table get(int number) {
+        return sTables.get(number);
     }
 
-    public int size() {
-        return mTables.size();
+    public static int size() {
+        if (sTables == null) {
+            return 0;
+        }
+
+        return sTables.size();
     }
 }
