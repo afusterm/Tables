@@ -2,7 +2,7 @@
 <manifest package="io.keepcoding.tables"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -17,17 +17,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SettingsActivity"
+        <activity
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".activity.TablesActivity">
         </activity>
-        <activity android:name=".activity.OrderActivity"
+        <activity
+            android:name=".activity.OrderActivity"
             android:label="@string/title_order"
             android:parentActivityName=".activity.TablesActivity">
         </activity>
-        <activity android:name=".activity.CoursesActivity"
+        <activity
+            android:name=".activity.CoursesActivity"
             android:label="@string/title_courses"
             android:parentActivityName=".activity.CoursesActivity">
+        </activity>
+        <activity android:name=".activity.EditCourseActivity"
+            android:parentActivityName=".activity.OrderActivity">
         </activity>
     </application>
 

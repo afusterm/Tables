@@ -17,7 +17,9 @@ public class OrderRowViewHolder extends RecyclerView.ViewHolder {
     private TextView mAmount;
     private ImageButton mAddButton;
     private ImageButton mDecrementButton;
+    private ImageButton mOrderEditButton;
     private Order.Line mLine;
+    private OrderRowListener mListener;
 
     public OrderRowViewHolder(View itemView) {
         super(itemView);
@@ -27,6 +29,7 @@ public class OrderRowViewHolder extends RecyclerView.ViewHolder {
         mAmount = (TextView) itemView.findViewById(R.id.row_line_order_amount);
         mAddButton = (ImageButton) itemView.findViewById(R.id.row_line_order_add_button);
         mDecrementButton = (ImageButton) itemView.findViewById(R.id.row_line_order_decrement_button);
+        mOrderEditButton = (ImageButton) itemView.findViewById(R.id.row_line_order_edit);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +49,15 @@ public class OrderRowViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+        mOrderEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.editButtonPushed(mLine);
+                }
+            }
+        });
     }
 
     private void updateUnits(int units) {
@@ -59,5 +71,9 @@ public class OrderRowViewHolder extends RecyclerView.ViewHolder {
         mLine = line;
         mCourseName.setText(line.getCourse().getName());
         mAmount.setText(String.valueOf(line.getCourse().getPrice()));
+    }
+
+    public void setListener(OrderRowListener listener) {
+        mListener = listener;
     }
 }

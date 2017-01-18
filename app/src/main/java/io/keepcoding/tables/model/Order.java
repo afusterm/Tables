@@ -1,5 +1,7 @@
 package io.keepcoding.tables.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,15 @@ public class Order {
 
     public class Line {
         private Course mCourse;
+        private Order mOrder;
         private String mVariant;
         private int mUnits;
+        private int mNumber;
 
-        private Line(Course course) {
+        private Line(Order order, Course course) {
             mCourse = course;
             mUnits = 1;
+            mOrder = order;
         }
 
         public Course getCourse() {
@@ -39,15 +44,24 @@ public class Order {
         public void setUnits(int units) {
             mUnits = units;
         }
+
+        public Order getOrder() {
+            return mOrder;
+        }
+
+        public int getNumber() {
+            return mNumber;
+        }
     }
 
     private List<Line> mLines;
     private List<OrderListener> mListeners;
     private Table mTable;
 
-    Order() {
+    Order(@NonNull final Table table) {
         mLines = new ArrayList<>();
         mListeners = new ArrayList<>();
+        mTable = table;
     }
 
     public float calculateTotal() {
@@ -69,7 +83,8 @@ public class Order {
     }
 
     public void addLine(Course course) {
-        Line line = new Line(course);
+        Line line = new Line(this, course);
+        line.mNumber = mLines.size();
         mLines.add(line);
 
         for (OrderListener listener: mListeners) {
@@ -87,5 +102,9 @@ public class Order {
 
     public int size() {
         return mLines.size();
+    }
+
+    public Table getTable() {
+        return mTable;
     }
 }

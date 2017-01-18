@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 
 import io.keepcoding.tables.R;
 import io.keepcoding.tables.model.Order;
+import io.keepcoding.tables.view.OrderRowListener;
 import io.keepcoding.tables.view.OrderRowViewHolder;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrderRowViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Order mOrder;
+    private OrderRowListener mListener;
 
     public OrdersAdapter(@NonNull final Context context, @NonNull final Order order) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -23,8 +25,17 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrderRowViewHolder> {
     @Override
     public OrderRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View root = mLayoutInflater.inflate(R.layout.row_line_order, parent, false);
+        OrderRowViewHolder viewHolder = new OrderRowViewHolder(root);
+        viewHolder.setListener(new OrderRowListener() {
+            @Override
+            public void editButtonPushed(Order.Line line) {
+                if (mListener != null) {
+                    mListener.editButtonPushed(line);
+                }
+            }
+        });
 
-        return new OrderRowViewHolder(root);
+        return viewHolder;
     }
 
     @Override
@@ -36,5 +47,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrderRowViewHolder> {
     @Override
     public int getItemCount() {
         return mOrder.size();
+    }
+
+    public void setListener(OrderRowListener listener) {
+        mListener = listener;
     }
 }

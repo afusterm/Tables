@@ -15,4 +15,6 @@
     <string name="title_order">Pedido</string>
     <string name="title_courses">Platos</string>
     <string name="title_tables">Mesas</string>
+    <string name="activity_edit_course_variant_title">Introduzca las modificaciones para el plato</string>
+    <string name="activity_edit_course_save">Guardar</string>
 </resources>

@@ -6,7 +6,7 @@ public class Table {
 
     public Table(int number) {
         mNumber = number;
-        mOrder = new Order();
+        mOrder = new Order(this);
     }
 
     public int getNumber() {
