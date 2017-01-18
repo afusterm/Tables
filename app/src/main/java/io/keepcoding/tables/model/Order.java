@@ -68,7 +68,7 @@ public class Order {
         float total = 0;
         for (Line line: mLines) {
             Course course = line.getCourse();
-            total += course.getPrice();
+            total += course.getPrice() * line.getUnits();
         }
 
         return total;

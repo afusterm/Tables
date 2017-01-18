@@ -16,4 +16,8 @@ public class Table {
     public Order getOrder() {
         return mOrder;
     }
+
+    public void setOrder(Order order) {
+        mOrder = order;
+    }
 }

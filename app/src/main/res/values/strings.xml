@@ -17,4 +17,7 @@
     <string name="title_tables">Mesas</string>
     <string name="activity_edit_course_variant_title">Introduzca las modificaciones para el plato</string>
     <string name="activity_edit_course_save">Guardar</string>
+    <string name="menu_order_bill">Cuenta</string>
+    <string name="order_fragment_total_bill_text">La cuenta es de %.2f€</string>
+    <string name="order_ok_text">Aceptar</string>
 </resources>

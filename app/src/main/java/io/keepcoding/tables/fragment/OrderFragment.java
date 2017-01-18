@@ -1,13 +1,18 @@
 package io.keepcoding.tables.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,6 +44,12 @@ public class OrderFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,5 +117,27 @@ public class OrderFragment extends Fragment {
             Order.Line line = mOrder.getLine(lineNumber);
             line.setVariant(variant);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_order, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_order_bill) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setTitle(R.string.menu_order_bill);
+            dialog.setMessage(String.format(getString(R.string.order_fragment_total_bill_text), mOrder.calculateTotal()));
+            dialog.setNeutralButton(R.string.order_ok_text, null);
+
+            dialog.show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
