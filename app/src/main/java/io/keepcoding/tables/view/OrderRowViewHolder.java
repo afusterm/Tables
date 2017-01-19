@@ -71,6 +71,7 @@ public class OrderRowViewHolder extends RecyclerView.ViewHolder {
         mLine = line;
         mCourseName.setText(line.getCourse().getName());
         mAmount.setText(String.valueOf(line.getCourse().getPrice() * line.getUnits()));
+        mUnits.setText(String.valueOf(line.getUnits()));
     }
 
     public void setListener(OrderRowListener listener) {
