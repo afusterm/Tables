@@ -31,8 +31,6 @@ public class TablesFragment extends Fragment {
         void tableSelected(int position);
     }
 
-    public static final String EXTRA_ORDER = "io.keepcoding.tables.fragment.TablesActivity.EXTRA_ORDER";
-
     private static final int REQUEST_TABLES = 1;
     private static final String NUMBER_OF_TABLES = "NumberOfTables";
 

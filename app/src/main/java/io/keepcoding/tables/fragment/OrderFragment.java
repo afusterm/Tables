@@ -3,7 +3,6 @@ package io.keepcoding.tables.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,29 +17,42 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.keepcoding.tables.R;
-import io.keepcoding.tables.activity.CoursesActivity;
-import io.keepcoding.tables.activity.EditCourseActivity;
+import io.keepcoding.tables.activity.TablesActivity;
 import io.keepcoding.tables.adapter.OrdersAdapter;
-import io.keepcoding.tables.model.Courses;
 import io.keepcoding.tables.model.Order;
 import io.keepcoding.tables.model.Tables;
 import io.keepcoding.tables.view.OrderRowListener;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class OrderFragment extends Fragment {
+    public interface OnAddOrderClickedListener {
+        void addOrderButtonClicked();
+    }
+
+    public interface OnEditOrderClickedListener {
+        void editOrderClicked(final Order.Line line);
+    }
+
     public static final String EXTRA_COURSE_NAME = "OrderRowViewHolder.EXTRA_COURSE_NAME";
     public static final String EXTRA_VARIANT = "OrderRowViewHolder.EXTRA_VARIANT";
     public static final String EXTRA_LINE_NUMBER = "OrderRowViewHolder.LINE_NUMBER";
-
-    private static final int ORDER_REQUEST = 1;
-    private static final int EDIT_REQUEST = 2;
+    public static final int ORDER_REQUEST = 1;
+    public static final int EDIT_REQUEST = 2;
 
     private Order mOrder;
     private RecyclerView mOrdersRecyclerView;
+    private OnAddOrderClickedListener mOnAddOrderClickedListener;
+    private OnEditOrderClickedListener mOnEditOrderClickedListener;
+
+    public void setOnAddOrderClickedListener(OnAddOrderClickedListener onAddOrderClickedListener) {
+        mOnAddOrderClickedListener = onAddOrderClickedListener;
+    }
+
+    public void setOnEditOrderClickedListener(OnEditOrderClickedListener onEditOrderClickedListener) {
+        mOnEditOrderClickedListener = onEditOrderClickedListener;
+    }
 
     public OrderFragment() {
     }
@@ -64,7 +76,7 @@ public class OrderFragment extends Fragment {
         mOrdersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
         mOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        int position = getActivity().getIntent().getIntExtra(TablesFragment.EXTRA_ORDER, 0);
+        int position = getActivity().getIntent().getIntExtra(TablesActivity.EXTRA_ORDER, 0);
         setOrder(Tables.get(position).getOrder());
 
         configureAddButton(root);
@@ -82,11 +94,9 @@ public class OrderFragment extends Fragment {
         adapter.setListener(new OrderRowListener() {
             @Override
             public void editButtonPushed(Order.Line line) {
-                Intent i = new Intent(getActivity(), EditCourseActivity.class);
-                i.putExtra(EXTRA_COURSE_NAME, line.getCourse().getName());
-                i.putExtra(EXTRA_VARIANT, line.getVariant());
-                i.putExtra(EXTRA_LINE_NUMBER, line.getNumber());
-                startActivityForResult(i, EDIT_REQUEST);
+                if (mOnEditOrderClickedListener != null) {
+                    mOnEditOrderClickedListener.editOrderClicked(line);
+                }
             }
         });
 
@@ -108,25 +118,11 @@ public class OrderFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CoursesActivity.class);
-                startActivityForResult(intent, ORDER_REQUEST);
+                if (mOnAddOrderClickedListener != null) {
+                    mOnAddOrderClickedListener.addOrderButtonClicked();
+                }
             }
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ORDER_REQUEST && resultCode == RESULT_OK) {
-            int position = data.getIntExtra(CoursesActivity.EXTRA_COURSE_POSITION, 0);
-            mOrder.addLine(Courses.get(position));
-        } else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
-            int lineNumber = data.getIntExtra(OrderFragment.EXTRA_LINE_NUMBER, 0);
-            String variant = data.getStringExtra(OrderFragment.EXTRA_VARIANT);
-            Order.Line line = mOrder.getLine(lineNumber);
-            line.setVariant(variant);
-        }
     }
 
     @Override

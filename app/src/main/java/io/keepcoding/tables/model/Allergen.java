@@ -1,6 +1,8 @@
 package io.keepcoding.tables.model;
 
-public class Allergen {
+import java.io.Serializable;
+
+public class Allergen implements Serializable {
     private String mName;
     private String mIconURL;
 

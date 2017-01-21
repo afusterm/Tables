@@ -1,17 +1,20 @@
 package io.keepcoding.tables.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Tables {
-    private static List<Table> sTables;
+    private static ArrayList<Table> sTables;
 
     public static void createTables(int numberOfTables) {
         sTables = new ArrayList<>(numberOfTables);
         for (int i = 0; i < numberOfTables; i++) {
             sTables.add(new Table(i + 1));
         }
+    }
+
+    public static void createTables(final ArrayList<Table> tables) {
+        sTables = tables;
     }
 
     public static Table get(int number) {
@@ -24,5 +27,9 @@ public class Tables {
         }
 
         return sTables.size();
+    }
+
+    public static ArrayList<Table> allTables() {
+        return sTables;
     }
 }

@@ -2,17 +2,18 @@ package io.keepcoding.tables.model;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Order {
+public class Order implements Serializable {
     public interface OrderListener {
         void lineAdded(Line line);
         void lineRemoved(int line);
     }
 
-    public class Line {
+    public class Line implements Serializable {
         private Course mCourse;
         private Order mOrder;
         private String mVariant;
@@ -55,7 +56,7 @@ public class Order {
     }
 
     private List<Line> mLines;
-    private List<OrderListener> mListeners;
+    private transient List<OrderListener> mListeners;
     private Table mTable;
 
     Order(@NonNull final Table table) {
