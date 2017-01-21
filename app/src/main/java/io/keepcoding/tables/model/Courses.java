@@ -15,6 +15,10 @@ public class Courses {
     }
 
     public static int size() {
+        if (sCourses == null) {
+            return 0;
+        }
+
         return sCourses.size();
     }
 

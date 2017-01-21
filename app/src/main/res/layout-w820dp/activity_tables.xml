@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_tables"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.TablesActivity">
+    tools:context=".activity.TablesActivity"
+    android:orientation="horizontal">
 
     <fragment
         android:id="@+id/activity_tables_fragment_tables"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:name="io.keepcoding.tables.fragment.TablesFragment"
         tools:layout="@layout/fragment_tables"/>
-</FrameLayout>
+    <fragment
+        android:id="@+id/activity_order_fragment_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="io.keepcoding.tables.fragment.OrderFragment"
+        tools:layout="@layout/fragment_order"/>
+</LinearLayout>

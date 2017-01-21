@@ -1,12 +1,15 @@
 package io.keepcoding.tables.activity;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import org.json.JSONException;
 
@@ -17,24 +20,73 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import io.keepcoding.tables.R;
+import io.keepcoding.tables.fragment.OrderFragment;
+import io.keepcoding.tables.fragment.TablesFragment;
 import io.keepcoding.tables.model.Courses;
+import io.keepcoding.tables.model.Order;
+import io.keepcoding.tables.model.Tables;
+
+import static io.keepcoding.tables.fragment.TablesFragment.EXTRA_ORDER;
 
 public class TablesActivity extends AppCompatActivity {
     private static final String COURSES_JSON_URL = "https://raw.githubusercontent.com/afusterm/tables_resources/master/courses.json";
     private static final String TAG = TablesActivity.class.getCanonicalName();
+    private static final String TABLE_NUMBER = "TABLE_NUMBER";
+
+    private Order mOrder;
+    private int mTableNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupThreadPolicy();
-        downloadCourses();
+
         setContentView(R.layout.activity_tables);
+
+        if (Courses.size() == 0) {
+            downloadCourses();
+        }
+
+        if (savedInstanceState != null) {
+            int mTableNumber = savedInstanceState.getInt(TABLE_NUMBER);
+            mOrder = Tables.get(mTableNumber).getOrder();
+        }
+
+        FragmentManager fm = getFragmentManager();
+        TablesFragment tablesFragment = (TablesFragment) fm.findFragmentById(R.id.activity_tables_fragment_tables);
+        final OrderFragment orderFragment = (OrderFragment) fm.findFragmentById(R.id.activity_order_fragment_order);
+
+        if (orderFragment == null) {
+            tablesFragment.setListener(new TablesFragment.Listener() {
+                @Override
+                public void tableSelected(int position) {
+                    mOrder = Tables.get(position).getOrder();
+                    Intent intent = new Intent(TablesActivity.this, OrderActivity.class);
+                    intent.putExtra(EXTRA_ORDER, position);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            tablesFragment.setListener(new TablesFragment.Listener() {
+                @Override
+                public void tableSelected(int position) {
+                    mOrder = Tables.get(position).getOrder();
+                    orderFragment.setOrder(mOrder);
+                }
+            });
+        }
     }
 
     private void setupThreadPolicy() {
         // this is for avoid the android.os.StrictMode$AndroidBlockGuardPolicy.onNetwork exception
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(TABLE_NUMBER, mTableNumber);
     }
 
     private void downloadCourses() {
@@ -92,5 +144,19 @@ public class TablesActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_order_bill && mOrder != null) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.menu_order_bill);
+            dialog.setMessage(String.format(getString(R.string.order_fragment_total_bill_text), mOrder.calculateTotal()));
+            dialog.setNeutralButton(R.string.order_ok_text, null);
 
+            dialog.show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

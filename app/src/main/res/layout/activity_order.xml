@@ -10,6 +10,7 @@
         android:id="@+id/activity_order_fragment_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="io.keepcoding.tables.fragment.OrderFragment"/>
+        android:name="io.keepcoding.tables.fragment.OrderFragment"
+        tools:layout="@layout/fragment_order"/>
 
 </FrameLayout>

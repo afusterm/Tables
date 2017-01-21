@@ -2,11 +2,12 @@ package io.keepcoding.tables.fragment;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,16 +40,20 @@ public class OrderFragment extends Fragment {
     private static final int EDIT_REQUEST = 2;
 
     private Order mOrder;
+    private RecyclerView mOrdersRecyclerView;
 
     public OrderFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -56,14 +61,23 @@ public class OrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_order, container, false);
 
-        int position = getActivity().getIntent().getIntExtra(TablesFragment.EXTRA_ORDER, 0);
-        mOrder = Tables.get(position).getOrder();
+        mOrdersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
+        mOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView ordersRecyclerView = (RecyclerView) root.findViewById(R.id.orders_recycler_view);
-        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        int position = getActivity().getIntent().getIntExtra(TablesFragment.EXTRA_ORDER, 0);
+        setOrder(Tables.get(position).getOrder());
+
+        configureAddButton(root);
+
+
+        return root;
+    }
+
+    public void setOrder(@NonNull final Order order) {
+        mOrder = order;
 
         final OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
-        ordersRecyclerView.setAdapter(adapter);
+        mOrdersRecyclerView.setAdapter(adapter);
 
         adapter.setListener(new OrderRowListener() {
             @Override
@@ -87,10 +101,6 @@ public class OrderFragment extends Fragment {
 
             }
         });
-
-        configureAddButton(root);
-
-        return root;
     }
 
     private void configureAddButton(View root){
@@ -128,7 +138,7 @@ public class OrderFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_order_bill) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.menu_order_bill);
             dialog.setMessage(String.format(getString(R.string.order_fragment_total_bill_text), mOrder.calculateTotal()));
             dialog.setNeutralButton(R.string.order_ok_text, null);

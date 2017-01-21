@@ -13,6 +13,8 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 }

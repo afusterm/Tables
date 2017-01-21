@@ -1,10 +1,10 @@
 package io.keepcoding.tables.fragment;
 
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.keepcoding.tables.R;
-import io.keepcoding.tables.activity.OrderActivity;
 import io.keepcoding.tables.activity.SettingsActivity;
 import io.keepcoding.tables.model.Tables;
 
@@ -28,16 +27,27 @@ import static io.keepcoding.tables.model.Tables.createTables;
 
 
 public class TablesFragment extends Fragment {
+    public interface Listener {
+        void tableSelected(int position);
+    }
+
     public static final String EXTRA_ORDER = "io.keepcoding.tables.fragment.TablesActivity.EXTRA_ORDER";
 
     private static final int REQUEST_TABLES = 1;
     private static final String NUMBER_OF_TABLES = "NumberOfTables";
 
     private View root;
-
+    private Listener mListener;
 
     public TablesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -53,8 +63,6 @@ public class TablesFragment extends Fragment {
             createTables(tables);
             fillListWithTables(root);
         }
-
-        setHasOptionsMenu(true);
 
         return root;
     }
@@ -92,6 +100,10 @@ public class TablesFragment extends Fragment {
         }
     }
 
+    public void setListener(final Listener listener) {
+        mListener = listener;
+    }
+
     private void openSettings() {
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
 
@@ -111,9 +123,9 @@ public class TablesFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), OrderActivity.class);
-                intent.putExtra(EXTRA_ORDER, position);
-                startActivity(intent);
+                if (mListener != null) {
+                    mListener.tableSelected(position);
+                }
             }
         });
     }

@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 
 import io.keepcoding.tables.R;
 import io.keepcoding.tables.model.Allergen;
@@ -30,12 +31,12 @@ public class CourseRowViewHolder extends RecyclerView.ViewHolder {
     private TextView mName;
     private TextView mPrice;
     private LinearLayout mAllergensLayout;
-    private Context mContext;
+    private WeakReference<Context> mContext;
 
     public CourseRowViewHolder(View rowCourse) {
         super(rowCourse);
 
-        mContext = rowCourse.getContext();
+        mContext = new WeakReference<>(rowCourse.getContext());
         mName = (TextView) rowCourse.findViewById(R.id.row_course_name);
         mPrice = (TextView) rowCourse.findViewById(R.id.row_course_price);
         mPicture = (ImageView) rowCourse.findViewById(R.id.row_course_image);
@@ -44,11 +45,11 @@ public class CourseRowViewHolder extends RecyclerView.ViewHolder {
 
     public void setCourse(final @NonNull Course course) {
         mName.setText(course.getName());
-        mPrice.setText(String.valueOf(course.getPrice()) + " " + mContext.getString(R.string.currency));
+        mPrice.setText(String.valueOf(course.getPrice()) + " " + mContext.get().getString(R.string.currency));
         setImageOnImageView(mPicture, course.getPictureURL());
 
         for (Allergen allergen: course.getAllergens()) {
-            ImageView icon = new ImageView(mContext);
+            ImageView icon = new ImageView(mContext.get());
             setImageOnImageView(icon, allergen.getIconURL());
             mAllergensLayout.addView(icon);
         }
@@ -60,7 +61,7 @@ public class CourseRowViewHolder extends RecyclerView.ViewHolder {
         Thread downloader = new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmap = getPictureFromURL(imageURL, mContext);
+                Bitmap bitmap = getPictureFromURL(imageURL, mContext.get());
                 if (bitmap != null) {
                     setImageBitmapOnUIThread(imageView, bitmap);
                 }
@@ -71,7 +72,7 @@ public class CourseRowViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setImageBitmapOnUIThread(final ImageView imageView, final Bitmap bitmap) {
-        Handler handler = new Handler(mContext.getMainLooper());
+        Handler handler = new Handler(mContext.get().getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
