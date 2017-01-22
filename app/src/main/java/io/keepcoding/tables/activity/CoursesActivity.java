@@ -22,7 +22,7 @@ public class CoursesActivity extends AppCompatActivity {
         RecyclerView coursesRecyclerView = (RecyclerView) findViewById(R.id.courses_recycler_view);
         coursesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        CoursesAdapter adapter = new CoursesAdapter(this);
+        CoursesAdapter adapter = new CoursesAdapter();
         adapter.setOnElementClickListener(new OnElementClick() {
             @Override
             public void clickedOn(int position) {

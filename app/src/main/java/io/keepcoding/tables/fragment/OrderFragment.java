@@ -88,7 +88,7 @@ public class OrderFragment extends Fragment {
     public void setOrder(@NonNull final Order order) {
         mOrder = order;
 
-        final OrdersAdapter adapter = new OrdersAdapter(getActivity(), mOrder);
+        final OrdersAdapter adapter = new OrdersAdapter(mOrder);
         mOrdersRecyclerView.setAdapter(adapter);
 
         adapter.setListener(new OrderRowListener() {

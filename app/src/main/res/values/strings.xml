@@ -20,4 +20,7 @@
     <string name="menu_order_bill">Cuenta</string>
     <string name="order_fragment_total_bill_text">La cuenta es de %.2f€</string>
     <string name="order_ok_text">Aceptar</string>
+    <string name="download_courses">Descargando platos</string>
+    <string name="download_error">Se produjo un error al descargar los platos</string>
+    <string name="title_error">Error</string>
 </resources>

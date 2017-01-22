@@ -1,6 +1,5 @@
 package io.keepcoding.tables.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,16 +13,14 @@ import io.keepcoding.tables.view.CourseRowViewHolder;
 import io.keepcoding.tables.view.OnElementClick;
 
 public class CoursesAdapter extends RecyclerView.Adapter<CourseRowViewHolder> {
-    private final LayoutInflater mLayoutInflater;
     private OnElementClick mListener;
 
-    public CoursesAdapter(@NonNull Context context) {
-        mLayoutInflater = LayoutInflater.from(context);
+    public CoursesAdapter() {
     }
 
     @Override
     public CourseRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View root = mLayoutInflater.inflate(R.layout.row_course, parent, false);
+        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_course, parent, false);
 
         return new CourseRowViewHolder(root);
     }

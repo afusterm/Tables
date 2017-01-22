@@ -1,6 +1,5 @@
 package io.keepcoding.tables.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,18 +12,17 @@ import io.keepcoding.tables.view.OrderRowListener;
 import io.keepcoding.tables.view.OrderRowViewHolder;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrderRowViewHolder> {
-    private final LayoutInflater mLayoutInflater;
     private final Order mOrder;
     private OrderRowListener mListener;
 
-    public OrdersAdapter(@NonNull final Context context, @NonNull final Order order) {
-        mLayoutInflater = LayoutInflater.from(context);
+    public OrdersAdapter(@NonNull final Order order) {
         mOrder = order;
     }
 
     @Override
     public OrderRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View root = mLayoutInflater.inflate(R.layout.row_line_order, parent, false);
+        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_line_order, parent, false);
+        // XXX View root = mLayoutInflater.inflate(R.layout.row_line_order, parent, false);
         OrderRowViewHolder viewHolder = new OrderRowViewHolder(root);
         viewHolder.setListener(new OrderRowListener() {
             @Override

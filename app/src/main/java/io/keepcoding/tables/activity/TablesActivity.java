@@ -9,7 +9,6 @@ import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 
 import org.json.JSONException;
 
@@ -71,6 +70,11 @@ public class TablesActivity extends AppCompatActivity {
                 }
             });
         } else {
+            /* XXX
+            fm.beginTransaction()
+                    .remove(orderFragment)
+                    .commit();*/
+
             orderFragment.setOnAddOrderClickedListener(new OrderFragment.OnAddOrderClickedListener() {
                 @Override
                 public void addOrderButtonClicked() {
@@ -89,12 +93,13 @@ public class TablesActivity extends AppCompatActivity {
                     startActivityForResult(i, OrderFragment.EDIT_REQUEST);
                 }
             });
-
             tablesFragment.setListener(new TablesFragment.Listener() {
                 @Override
                 public void tableSelected(int position) {
                     mOrder = Tables.get(position).getOrder();
-                    orderFragment.setOrder(mOrder);
+                    if (orderFragment.isAdded()) {
+                        orderFragment.setOrder(mOrder);
+                    }
                 }
             });
         }
@@ -124,7 +129,7 @@ public class TablesActivity extends AppCompatActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                Snackbar.make(findViewById(android.R.id.content), "Descargando platos", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content), R.string.download_courses, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -145,8 +150,8 @@ public class TablesActivity extends AppCompatActivity {
                     return sb.toString();
                 } catch (IOException e) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(TablesActivity.this);
-                    alertDialog.setTitle("Error");
-                    alertDialog.setMessage("Se produjo un error al descargar los platos");
+                    alertDialog.setTitle(R.string.title_error);
+                    alertDialog.setMessage(R.string.download_error);
                     alertDialog.show();
                 }
 
@@ -172,7 +177,7 @@ public class TablesActivity extends AppCompatActivity {
                     Snackbar.LENGTH_LONG).show();
         }
     }
-
+/*XXX
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_order_bill && mOrder != null) {
@@ -188,12 +193,12 @@ public class TablesActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == OrderFragment.ORDER_REQUEST && resultCode == RESULT_OK) {
+        if (requestCode == OrderFragment.ORDER_REQUEST && resultCode == RESULT_OK && mOrder != null) {
             int position = data.getIntExtra(CoursesActivity.EXTRA_COURSE_POSITION, 0);
             mOrder.addLine(Courses.get(position));
         } else if (requestCode == OrderFragment.EDIT_REQUEST && resultCode == RESULT_OK) {
